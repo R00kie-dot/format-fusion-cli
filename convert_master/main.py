@@ -1,38 +1,62 @@
 """
 Usage:
-  main.py run <input_file> [--output=<output_file>]
+  main.py [options...] <command> [<args>...]
+  main.py (-h | --help)
 
-Options:
-  -h --help                Show helps.
-  --output=<output_file>   Output YAML file [default: output.yaml].
+Global options:
+    -h --help                Show helps.
+
+Commands:
+    yaml                    Converting JSON to YAML.
+    image                   Converting image to Base64.
 """
 import logging
-
+import json
 from docopt import docopt
-from converting import Converting, logger
+from converting import Converting
+import commands
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler("../app.log", mode='a', encoding='utf-8'),
         logging.StreamHandler()
     ]
 )
 
+logger = logging.getLogger(__name__)
 
-def main():
-    arguments = docopt(__doc__)
-    input_file = arguments['<input_file>']
-    output_file = arguments['--output']
 
-    convert = Converting(input_file, output_file)
-    logging.info("The conversion has started...")
+def run_command(opts):
+    command_name = opts["<command>"]
+    match command_name:
+        case "yaml":
+            cmd_module = commands.cmd_yaml
+        case "image":
+            cmd_module = commands.cmd_image
+        case _:
+            raise RuntimeError(f"Invalid command <{command_name}>")
+
+    cmd_options = docopt(
+        cmd_module.__doc__, argv=[command_name] + opts["<args>"]
+    )
+    logger.debug(
+        "Run command <%s> with options: %s", command_name, json.dumps(cmd_options)
+    )
+
+    return cmd_module.run(cmd_options)
+
+
+def main(opts):
+    logger.debug("Run app with options: %s", json.dumps(opts))
+
     try:
-        convert.run()
+        run_command(opts)
     except Exception as e:
         logger.error(e)
 
 
 if __name__ == "__main__":
-    main()
+    main(
+        docopt(__doc__, options_first=True)
+    )
