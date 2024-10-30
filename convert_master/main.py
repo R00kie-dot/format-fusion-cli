@@ -17,7 +17,7 @@ from converting import Converting
 import commands
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.DEBUG,  # todo: поменять уровень на INFO после всех работ
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler()

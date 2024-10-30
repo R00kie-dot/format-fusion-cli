@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 class Converting:
 
-    def __init__(self, input_file: str, output_file: str):
+    def __init__(self, input_file: str, output_file: str | None = None):
         self.input_file = input_file
         self.output_file = output_file
 
@@ -23,12 +23,8 @@ class Converting:
             file.write(yaml_string)
         logger.info(f"The JSON from {self.input_file} was converted to YAML and saved in {self.output_file}")
 
-    def convert_image_to_base64(self) -> None:
+    def convert_image_to_base64(self) -> str:
         with open(self.input_file, "rb") as image:
             base64_string = base64.b64encode(image.read()).decode("utf-8")
 
-        image_name = os.path.basename(self.input_file)
-
-        with open(self.output_file, "w", encoding='utf-8') as file:
-            file.write(base64_string)
-        logger.info(F"The {image_name} has been converted and saved at {self.output_file}")
+        return base64_string
