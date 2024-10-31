@@ -1,7 +1,7 @@
 """
 Usage:
-  format-fusion [options...] <command> [<args>...]
-  format-fusion (-h | --help)
+  main.py [options...] <command> [<args>...]
+  main.py (-h | --help)
 
 Global options:
     -h --help                Show helps.
@@ -10,17 +10,18 @@ Commands:
     yaml                    Converting JSON to YAML.
     image                   Converting image to Base64.
 """
-import json
 import logging
-
+import json
 from docopt import docopt
-
-from formatfusion import commands
+from converting import Converting
+import commands
 
 logging.basicConfig(
     level=logging.DEBUG,  # todo: поменять уровень на INFO после всех работ
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    handlers=[logging.StreamHandler()],
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler()
+    ]
 )
 
 logger = logging.getLogger(__name__)
@@ -36,7 +37,9 @@ def run_command(opts):
         case _:
             raise RuntimeError(f"Invalid command <{command_name}>")
 
-    cmd_options = docopt(cmd_module.__doc__, argv=[command_name] + opts["<args>"])
+    cmd_options = docopt(
+        cmd_module.__doc__, argv=[command_name] + opts["<args>"]
+    )
     logger.debug(
         "Run command <%s> with options: %s", command_name, json.dumps(cmd_options)
     )
@@ -54,4 +57,6 @@ def main(opts):
 
 
 if __name__ == "__main__":
-    main(docopt(__doc__, options_first=True))
+    main(
+        docopt(__doc__, options_first=True)
+    )
