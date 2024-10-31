@@ -11,9 +11,10 @@ Options:
     --output <output_path>      Path to save YAML file [default: output.yaml]
 """
 import logging
-from converting import Converting
-from helpers import validate_files
 import os
+
+from formatfusion.converting import Converting
+from formatfusion.helpers import validate_files
 
 logger = logging.getLogger(__name__)
 
@@ -46,8 +47,8 @@ def run_convert(opts) -> None:
     convert = Converting(input_file=json_file, output_file=yaml_file)
     yaml_string = convert.convert_json_to_yaml()
 
-    with open(yaml_file, "w", encoding='utf-8') as file:
+    with open(yaml_file, "w", encoding="utf-8") as file:
         file.write(yaml_string)
-    logger.info(f"The JSON from {json_file} was converted to YAML and saved in {yaml_file}")
-
-
+    logger.info(
+        f"The JSON from {json_file} was converted to YAML and saved in {yaml_file}"
+    )

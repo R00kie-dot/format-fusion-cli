@@ -9,12 +9,16 @@ Arguments:
 """
 import logging
 import os
-from converting import Converting
+
+from formatfusion.converting import Converting
+
 logger = logging.getLogger(__name__)
+
 
 def run(opts):
     logger.info("Start converting..")
     return run_convert(opts)
+
 
 def get_image_path(opts):
     opt_image_path = opts["<path>"]
@@ -22,6 +26,7 @@ def get_image_path(opts):
     if not os.path.exists(image_path):
         raise FileNotFoundError(f"File not found: {image_path}.")
     return image_path
+
 
 def run_convert(opts):
     image_file = get_image_path(opts)
