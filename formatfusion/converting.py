@@ -19,6 +19,4 @@ class Converting:
 
     def convert_image_to_base64(self) -> str:
         with open(self.input_file, "rb") as image:
-            base64_string = base64.b64encode(image.read()).decode("utf-8")
-
-        return base64_string
+            return base64.b64encode(image.read()).decode("utf-8")
