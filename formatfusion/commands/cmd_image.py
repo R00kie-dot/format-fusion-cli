@@ -2,10 +2,13 @@
 Run converting JSON to YAML
 
 Usage:
-    main.py [g-opts] image <path>
+    format-fusion [g-opts] image <path> [options]
 
 Arguments:
     <path>                      Path to image
+
+Options:
+    --output <output_path>      Path to save file [default: output.txt]
 """
 import logging
 import os
@@ -28,8 +31,20 @@ def get_image_path(opts):
     return image_path
 
 
+def get_output_path(opts):
+    opt_file_path = opts["--output"] if opts["--output"] is not None else "output.txt"
+    file_path = os.path.abspath(opt_file_path)
+    return file_path
+
+
 def run_convert(opts):
     image_file = get_image_path(opts)
+    output_path = get_output_path(opts)
+
     convert = Converting(input_file=image_file)
     base64_image = convert.convert_image_to_base64()
-    return logger.info(base64_image)
+
+    with open(output_path, "w") as file:
+        file.write(base64_image)
+        logger.info(f"The converted image was saved in {output_path}")
+
