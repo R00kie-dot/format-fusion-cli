@@ -47,4 +47,3 @@ def run_convert(opts):
     with open(output_path, "w") as file:
         file.write(base64_image)
         logger.info(f"The converted image was saved in {output_path}")
-

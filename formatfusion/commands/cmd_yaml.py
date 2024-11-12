@@ -2,7 +2,7 @@
 Run converting JSON to YAML
 
 Usage:
-    main.py [g-opts] yaml <path> [options]
+    format-fusion [g-opts] yaml <path> [options]
 
 Arguments:
     <path>                      Path to JSON file
