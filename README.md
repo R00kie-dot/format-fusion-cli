@@ -1,9 +1,31 @@
-# JSON to YAML 
+# Format Fusion 
 
-Скрипт для перевода JSON в YAML формат.  
+This is the tool's CLI for converting various formats.
 
-## Использование
+## Using
 
-- Cоздайте файл с расширением `.json`
-- Скопируйте в файл что нужно перевести в YAML
-- Запустите скрипт используя команду `python main.py run data.json --output=output.yaml`
+Format Fusion supports two commands for conversion:
+- JSON to YAML - `format-fusion yaml`
+- Image to Base64 - `format-fusion image`
+
+### Usage example
+Command to generate from JSON to YAML:
+
+``
+format-fusion yaml D:\response_api.json
+``
+
+The result of executing the command will be the generation of a YAML named `output.yaml`
+
+Optionally, you can specify where to save the converted files:
+
+``
+format-fusion yaml D:\screenshot.png --output D:\data.txt
+``
+
+This option is available for all commands.
+## Install 
+
+``
+pip install format-fusion-cli
+``

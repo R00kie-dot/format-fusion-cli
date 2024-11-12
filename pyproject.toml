@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "FormatFusion"
+name = "format-fusion-cli"
 version = "0.0.1"
 description = "A mini conversion tool"
 authors = ["R00kie <driftworks2013@yandex.ru>"]
