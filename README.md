@@ -27,7 +27,7 @@ This option is available for all commands.
 ## Install 
 
 ``
-pip install format-fusion-cli
+pip install cli-format-fusion
 ``
 
 ## Resources
