@@ -29,3 +29,7 @@ This option is available for all commands.
 ``
 pip install format-fusion-cli
 ``
+
+## Resources
+
+- [Issue Tracker](https://github.com/Nottezz/format-fusion-cli/issues)
