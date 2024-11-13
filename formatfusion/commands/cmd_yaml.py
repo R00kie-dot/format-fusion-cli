@@ -13,7 +13,7 @@ Options:
 import logging
 import os
 
-from formatfusion.converting import Converting
+from formatfusion.converter import Converter
 from formatfusion.helpers import validate_files
 
 logger = logging.getLogger(__name__)
@@ -44,7 +44,7 @@ def run_convert(opts) -> None:
     if not validate_files(json_file, yaml_file):
         return
 
-    convert = Converting(input_file=json_file, output_file=yaml_file)
+    convert = Converter(input_file=json_file, output_file=yaml_file)
     yaml_string = convert.convert_json_to_yaml()
 
     with open(yaml_file, "w", encoding="utf-8") as file:
