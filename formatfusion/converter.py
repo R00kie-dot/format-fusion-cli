@@ -7,7 +7,7 @@ import yaml
 logger = logging.getLogger(__name__)
 
 
-class Converting:
+class Converter:
     def __init__(self, input_file: str, output_file: str | None = None):
         self.input_file = input_file
         self.output_file = output_file

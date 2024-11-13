@@ -13,7 +13,7 @@ Options:
 import logging
 import os
 
-from formatfusion.converting import Converting
+from formatfusion.converter import Converter
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ def run_convert(opts):
     image_file = get_image_path(opts)
     output_path = get_output_path(opts)
 
-    convert = Converting(input_file=image_file)
+    convert = Converter(input_file=image_file)
     base64_image = convert.convert_image_to_base64()
 
     with open(output_path, "w") as file:

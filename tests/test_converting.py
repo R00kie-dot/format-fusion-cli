@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import mock_open, patch
 
-from formatfusion.converting import Converting
+from formatfusion.converter import Converter
 
 
 class TestConvertJsonToYaml(unittest.TestCase):
@@ -16,7 +16,7 @@ class TestConvertJsonToYaml(unittest.TestCase):
         mock_json_load.return_value = {"key": "value", "nested": {"key2": "value2"}}
         mock_yaml_dump.return_value = "key: value\nnested:\n  key2: value2\n"
 
-        converter = Converting("test.json")
+        converter = Converter("test.json")
         result = converter.convert_json_to_yaml()
 
         mock_open.assert_called_once_with("test.json", "r", encoding="utf-8")
@@ -31,7 +31,7 @@ class TestConvertJsonToYaml(unittest.TestCase):
     def test_convert_image_to_base64(self, mock_b64encode, mock_open):
         mock_b64encode.return_value = b"encoded_image_data"
 
-        converter = Converting("test_image.jpg")
+        converter = Converter("test_image.jpg")
         result = converter.convert_image_to_base64()
 
         mock_open.assert_called_once_with("test_image.jpg", "rb")
