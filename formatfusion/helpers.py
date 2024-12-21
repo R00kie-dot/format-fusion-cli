@@ -3,7 +3,7 @@ import os
 
 logger = logging.getLogger(__name__)
 
-VALID_EXTENSIONS = {"json", "png", "jpg"}
+VALID_EXTENSIONS = {"json", "yaml", "png", "jpg"}
 
 
 def get_file_extension(filename: str):
@@ -28,4 +28,9 @@ def validate_files(input_file, output_file) -> bool:
         )
         return False
 
+    if input_extension == "yaml" and get_file_extension(output_file) != "json":
+        logger.error(
+            "For a YAML input file, the output file must have the extension '.json'."
+        )
+        return False
     return True

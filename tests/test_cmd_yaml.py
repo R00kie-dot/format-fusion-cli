@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from formatfusion.commands.cmd_yaml import get_json_path, get_output_path, run_convert
+from formatfusion.commands.cmd_yaml import get_input_file_path, get_output_file_path, run_convert
 
 
 class TestFormatFusionYaml(unittest.TestCase):
@@ -33,22 +33,22 @@ class TestFormatFusionYaml(unittest.TestCase):
         with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as temp_json:
             temp_json_path = temp_json.name
         opts = {"<path>": temp_json_path}
-        result = get_json_path(opts)
+        result = get_input_file_path(opts)
         self.assertEqual(result, os.path.abspath(temp_json_path))
         os.remove(temp_json_path)
 
     def test_get_json_path_invalid(self):
         opts = {"<path>": "nonexistent.json"}
         with self.assertRaises(FileNotFoundError):
-            get_json_path(opts)
+            get_input_file_path(opts)
 
     def test_get_output_path(self):
         opts = {"--output": "custom_output.yaml"}
-        result = get_output_path(opts)
+        result = get_output_file_path(opts)
         self.assertEqual(result, os.path.abspath("custom_output.yaml"))
 
         opts = {"--output": None}
-        result = get_output_path(opts)
+        result = get_output_file_path(opts)
         self.assertEqual(result, os.path.abspath("output.yaml"))
 
     @patch(
