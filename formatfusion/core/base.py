@@ -1,6 +1,6 @@
+import logging
 import typing as t
 from pathlib import Path
-import logging
 
 logger = logging.getLogger(__name__)
 

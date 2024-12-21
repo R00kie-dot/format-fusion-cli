@@ -12,10 +12,11 @@ Options:
     --reverse                   A flag that allows you to convert from YAML to JSON
 """
 import logging
-from pathlib import Path
 import typing as t
+from pathlib import Path
 
 from formatfusion.helpers import validate_files
+
 from ..core.json_and_yaml import ConverterYAMLandJSON
 
 logger = logging.getLogger(__name__)
