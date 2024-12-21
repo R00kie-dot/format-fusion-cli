@@ -5,50 +5,59 @@ Usage:
     format-fusion [g-opts] yaml <path> [options]
 
 Arguments:
-    <path>                      Path to JSON file
+    <path>                      Path to JSON or YAML file
 
 Options:
-    --output <output_path>      Path to save YAML file [default: output.yaml]
+    --output <output_path>      Path to save YAML or JSON file
+    --reverse                   A flag that allows you to convert from YAML to JSON
 """
 import logging
-import os
+import typing as t
+from pathlib import Path
 
-from formatfusion.converter import Converter
 from formatfusion.helpers import validate_files
+
+from ..core.json_and_yaml import ConverterYAMLandJSON
 
 logger = logging.getLogger(__name__)
 
 
-def run(opts):
+def run(opts: t.Dict[str, t.Any]):
     logger.info("Start converting..")
     return run_convert(opts)
 
 
-def get_json_path(opts):
-    opt_json_path = opts["<path>"]
-    json_path = os.path.abspath(opt_json_path)
-    if not os.path.exists(json_path):
-        raise FileNotFoundError(f"File not found: {json_path}.")
-    return json_path
+def get_input_file_path(opts: t.Dict[str, t.Any]) -> Path:
+    opt_input_path = opts["<path>"]
+    input_path = Path(opt_input_path).resolve()
+    if not input_path.exists():
+        raise FileNotFoundError(f"File not found: {input_path}.")
+    return input_path
 
 
-def get_output_path(opts):
-    opt_yaml_path = opts["--output"] if opts["--output"] is not None else "output.yaml"
-    yaml_path = os.path.abspath(opt_yaml_path)
-    return yaml_path
+def get_output_file_path(opts: t.Dict[str, t.Any], input_file: Path) -> Path:
+    if opts["--output"] is not None:
+        output_path = Path(opts["--output"]).resolve()
+    else:
+        if input_file.suffix == ".json":
+            default_output = input_file.parent / "output.yaml"
+        elif input_file.suffix == ".yaml":
+            default_output = input_file.parent / "output.json"
+        else:
+            raise ValueError(f"Unsupported input file extension: {input_file.suffix}.")
+        output_path = default_output.resolve()
+
+    return output_path
 
 
-def run_convert(opts) -> None:
-    json_file = get_json_path(opts)
-    yaml_file = get_output_path(opts)
-    if not validate_files(json_file, yaml_file):
+def run_convert(opts: t.Dict[str, t.Any]) -> None:
+    input_file = get_input_file_path(opts)
+    output_file = get_output_file_path(opts, input_file)
+    if not validate_files(input_file, output_file):
         return
 
-    convert = Converter(input_file=json_file, output_file=yaml_file)
-    yaml_string = convert.convert_json_to_yaml()
-
-    with open(yaml_file, "w", encoding="utf-8") as file:
-        file.write(yaml_string)
-    logger.info(
-        f"The JSON from {json_file} was converted to YAML and saved in {yaml_file}"
-    )
+    convert = ConverterYAMLandJSON(input_file=input_file, output_file=output_file)
+    if opts["--reverse"]:
+        convert.convert_yaml_to_json()
+    else:
+        convert.convert_json_to_yaml()

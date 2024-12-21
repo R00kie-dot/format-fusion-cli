@@ -18,7 +18,7 @@ from docopt import docopt
 from formatfusion import commands
 
 logging.basicConfig(
-    level=logging.DEBUG,  # todo: поменять уровень на INFO после всех работ
+    level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[logging.StreamHandler()],
 )

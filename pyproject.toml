@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cli-format-fusion"
-version = "0.0.1"
+version = "0.1.0"
 description = "A mini conversion tool"
 authors = ["R00kie <driftworks2013@yandex.ru>"]
 packages = [

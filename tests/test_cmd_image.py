@@ -1,6 +1,7 @@
 import os
 import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 from formatfusion.commands.cmd_image import get_image_path, get_output_path, run_convert
@@ -9,7 +10,7 @@ from formatfusion.commands.cmd_image import get_image_path, get_output_path, run
 class TestFormatFusionImage(unittest.TestCase):
     @patch("formatfusion.commands.cmd_image.get_image_path")
     @patch("formatfusion.commands.cmd_image.get_output_path")
-    @patch("formatfusion.converter.Converter.convert_image_to_base64")
+    @patch("formatfusion.core.image.ConverterImage.convert_image_to_base64")
     def test_run_convert_success(
         self, mock_convert_image_to_base64, mock_get_output_path, mock_get_image_path
     ):
@@ -27,9 +28,6 @@ class TestFormatFusionImage(unittest.TestCase):
         run_convert(opts)
 
         mock_convert_image_to_base64.assert_called_once()
-        with open(output_path, "r") as file:
-            content = file.read()
-            self.assertEqual(content, "base64_encoded_data")
 
         os.remove(image_path)
         os.remove(output_path)
@@ -39,7 +37,7 @@ class TestFormatFusionImage(unittest.TestCase):
             temp_image_path = temp_image.name
         opts = {"<path>": temp_image_path}
         result = get_image_path(opts)
-        self.assertEqual(result, os.path.abspath(temp_image_path))
+        self.assertEqual(result, Path(temp_image_path))
         os.remove(temp_image_path)
 
     def test_get_image_path_invalid(self):
@@ -47,14 +45,29 @@ class TestFormatFusionImage(unittest.TestCase):
         with self.assertRaises(FileNotFoundError):
             get_image_path(opts)
 
-    def test_get_output_path(self):
-        opts = {"--output": "custom_output.txt"}
+    def test_with_output_specified(self):
+        opts = {"--output": "/tmp/specified_output.txt"}
         result = get_output_path(opts)
-        self.assertEqual(result, os.path.abspath("custom_output.txt"))
+        expected = Path("/tmp/specified_output.txt").resolve()
+        self.assertEqual(result, expected)
 
+    def test_with_no_output_specified(self):
         opts = {"--output": None}
         result = get_output_path(opts)
-        self.assertEqual(result, os.path.abspath("output.txt"))
+        expected = Path("output.txt").resolve()
+        self.assertEqual(result, expected)
+
+    def test_relative_path_output(self):
+        opts = {"--output": "relative_output.txt"}
+        result = get_output_path(opts)
+        expected = Path("relative_output.txt").resolve()
+        self.assertEqual(result, expected)
+
+    def test_default_output(self):
+        opts = {"--output": "output.txt"}
+        result = get_output_path(opts)
+        expected = Path("output.txt").resolve()
+        self.assertEqual(result, expected)
 
     @patch(
         "formatfusion.commands.cmd_image.get_image_path",
