@@ -2,8 +2,10 @@ import logging
 import pathlib
 import sys
 import unittest
+import coverage
 
 import black
+
 from isort import main as isort_main
 from mypy.main import main as mypy_main
 
@@ -13,6 +15,7 @@ logging.basicConfig(
     level=logging.INFO, format="%(levelname)-7s %(message)s", stream=sys.stdout
 )
 logger = logging.getLogger(__name__)
+
 
 def lint():
     if len(sys.argv) > 1:
@@ -61,6 +64,7 @@ def lint():
 
     logger.info("Mypy check passed")
 
+
 def format():
     if len(sys.argv) > 1:
         logger.warning("format not support arguments")
@@ -82,8 +86,15 @@ def format():
     ]
     black.patched_main()
 
+
 def test():
     logging.disable(logging.INFO)
+
+    cov = coverage.Coverage(
+        source=[str(top_level_dir / "formatfusion")],
+        omit=[str(top_level_dir / "tests/*")]
+    )
+    cov.start()
 
     test_dir = str(top_level_dir / "tests")
     discover_pattern = "test*.py"
@@ -92,7 +103,8 @@ def test():
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(test_suite)
 
-    if result.wasSuccessful():
-        sys.exit(0)
-    else:
-        sys.exit(1)
+    cov.stop()
+    cov.save()
+    cov.report()
+
+    sys.exit(0 if result.wasSuccessful() else 1)
