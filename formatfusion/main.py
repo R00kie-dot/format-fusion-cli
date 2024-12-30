@@ -12,6 +12,7 @@ Commands:
 """
 import json
 import logging
+import typing as t
 
 from docopt import docopt
 
@@ -26,13 +27,13 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def run_command(opts):
+def run_command(opts: t.Dict[str, t.Any]) -> t.Any:
     command_name = opts["<command>"]
     match command_name:
         case "yaml":
             cmd_module = commands.cmd_yaml
         case "image":
-            cmd_module = commands.cmd_image
+            cmd_module = commands.cmd_image  # type: ignore
         case _:
             raise RuntimeError(f"Invalid command <{command_name}>")
 
@@ -44,7 +45,7 @@ def run_command(opts):
     return cmd_module.run(cmd_options)
 
 
-def main(opts):
+def main(opts: t.Dict[str, t.Any]) -> t.Any:
     logger.debug("Run app with options: %s", json.dumps(opts))
 
     try:

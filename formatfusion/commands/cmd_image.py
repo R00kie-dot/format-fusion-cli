@@ -14,12 +14,12 @@ import logging
 import typing as t
 from pathlib import Path
 
-from ..core.image import ConverterImage
+from formatfusion.core.image import ConverterImage
 
 logger = logging.getLogger(__name__)
 
 
-def run(opts: t.Dict[str, t.Any]):
+def run(opts: t.Dict[str, t.Any]) -> t.Any:
     logger.info("Start converting..")
     return run_convert(opts)
 

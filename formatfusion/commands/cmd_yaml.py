@@ -15,14 +15,13 @@ import logging
 import typing as t
 from pathlib import Path
 
+from formatfusion.core.json_and_yaml import ConverterYAMLandJSON
 from formatfusion.helpers import validate_files
-
-from ..core.json_and_yaml import ConverterYAMLandJSON
 
 logger = logging.getLogger(__name__)
 
 
-def run(opts: t.Dict[str, t.Any]):
+def run(opts: t.Dict[str, t.Any]) -> t.Any:
     logger.info("Start converting..")
     return run_convert(opts)
 

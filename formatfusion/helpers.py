@@ -1,16 +1,19 @@
 import logging
 import os
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
 VALID_EXTENSIONS = {"json", "yaml", "png", "jpg"}
 
 
-def get_file_extension(filename: str):
-    return os.path.splitext(filename)[-1].lstrip(".")
+def get_file_extension(filename: Path) -> str:
+    if not filename.name:
+        raise ValueError("Filename cannot be empty.")
+    return filename.suffix.lstrip(".")
 
 
-def validate_files(input_file, output_file) -> bool:
+def validate_files(input_file: Path, output_file: Path) -> bool:
     if not os.path.isfile(input_file):
         logger.error(f"The file '{input_file}' does not exist")
         return False
