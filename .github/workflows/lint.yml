@@ -7,7 +7,7 @@ on:
       - develop
 
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,6 +28,6 @@ jobs:
         run: |
           poetry install
 
-      - name: Run tests
+      - name: Run linter
         run: |
           poetry run lint
