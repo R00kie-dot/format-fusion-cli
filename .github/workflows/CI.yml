@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  check:
+  Check:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,8 +27,11 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
+      - name: print dir
+        run: ls -la
+
       - name: Run linter
-        run: poetry run lint
+        run: poetry run -vvv lint
 
       - name: Run tests
         run: poetry run test
