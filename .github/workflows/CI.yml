@@ -1,33 +1,34 @@
-name: Run Tests
+name: CI
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main
-      - develop
 
 jobs:
-  test:
+  check:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-        
+        uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
-          
+
       - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          export PATH="$HOME/.local/bin:$PATH"
+        run: pip install poetry
 
       - name: Install dependencies
-        run: |
-          poetry install
+        run: poetry install
+
+      - name: Run linter
+        run: poetry run lint
 
       - name: Run tests
-        run: |
-          poetry run test
+        run: poetry run test
