@@ -42,5 +42,9 @@ def run_convert(opts: t.Dict[str, t.Any]) -> None:
     image_file = get_image_path(opts)
     output_path = get_output_path(opts)
 
-    convert = ConverterImage(input_file=image_file, output_file=output_path)
-    convert.convert_image_to_base64()
+    try:
+        convert = ConverterImage(input_file=image_file, output_file=output_path)
+        convert.convert_image_to_base64()
+    except ValueError as e:
+        logger.error(f"Validation error: {e}")
+
