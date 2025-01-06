@@ -65,7 +65,7 @@ def lint():
     logger.info("Mypy check passed")
 
 
-def format():
+def formating():
     if len(sys.argv) > 1:
         logger.warning("format not support arguments")
         logger.warning("Ignoring arguments: %s", sys.argv[1:])

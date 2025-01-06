@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  Check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Clear Poetry cache
+        run: poetry cache clear --all pypi
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: print dir
+        run: ls -la
+
+      - name: Run linter
+        run: poetry run -vvv lint
+
+      - name: Run tests
+        run: poetry run test
