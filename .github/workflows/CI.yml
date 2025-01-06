@@ -21,9 +21,6 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Clear Poetry cache
-        run: poetry cache clear --all pypi
-
       - name: Install Poetry
         run: pip install poetry
 
