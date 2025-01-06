@@ -15,7 +15,7 @@ Issues = "https://github.com/Nottezz/format-fusion-cli/issues"
 [tool.poetry.scripts]
 format-fusion = "formatfusion.__main__:__main__"
 lint = "scripts:lint"
-format = "scripts:format"
+formating = "scripts:formating"
 test = "scripts:test"
 
 [tool.poetry.dependencies]
