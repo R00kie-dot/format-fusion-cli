@@ -16,7 +16,6 @@ import typing as t
 from pathlib import Path
 
 from formatfusion.core.json_and_yaml import ConverterYAMLandJSON
-from formatfusion.helpers import validate_files
 
 logger = logging.getLogger(__name__)
 
@@ -52,11 +51,11 @@ def get_output_file_path(opts: t.Dict[str, t.Any], input_file: Path) -> Path:
 def run_convert(opts: t.Dict[str, t.Any]) -> None:
     input_file = get_input_file_path(opts)
     output_file = get_output_file_path(opts, input_file)
-    if not validate_files(input_file, output_file):
-        return
-
-    convert = ConverterYAMLandJSON(input_file=input_file, output_file=output_file)
-    if opts["--reverse"]:
-        convert.convert_yaml_to_json()
-    else:
-        convert.convert_json_to_yaml()
+    try:
+        convert = ConverterYAMLandJSON(input_file=input_file, output_file=output_file)
+        if opts["--reverse"]:
+            convert.convert_yaml_to_json()
+        else:
+            convert.convert_json_to_yaml()
+    except ValueError as e:
+        logger.error(f"Validation error: {e}")
